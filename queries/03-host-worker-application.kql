@@ -1,0 +1,16 @@
+let correlationId = "{{CORRELATION_ID}}";
+AppTraces
+| where isempty(correlationId) or tostring(Properties["CorrelationId"]) == correlationId
+| extend Category = tostring(Properties["CategoryName"]),
+         DemoLayer = tostring(Properties["DemoLayer"]),
+         SourceLayer = case(
+             Category startswith "LoggingDemo.Functions.Application", "Application",
+             Category startswith "LoggingDemo.Functions.Infrastructure", "Infrastructure",
+             Category startswith "LoggingDemo.Functions.Functions", "Function boundary",
+             Category startswith "Host.", "Functions host",
+             Category startswith "Function.", "Functions host/function",
+             Category startswith "Worker", "Isolated worker",
+             "Other")
+| summarize Events = count(), FirstSeen = min(TimeGenerated), LastSeen = max(TimeGenerated)
+    by SourceLayer, Category, DemoLayer, SeverityLevel
+| order by SourceLayer asc, Events desc

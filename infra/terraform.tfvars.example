@@ -1,0 +1,39 @@
+subscription_id = "00000000-0000-0000-0000-000000000000"
+location        = "germanywestcentral"
+environment     = "dev"
+workload_name   = "functionapplogging"
+
+resource_group_name            = "rg-functionapplogging-dev"
+managed_identity_name          = "id-functionapplogging-dev"
+storage_account_name           = "stfunctionlogdev001"
+log_analytics_workspace_name   = "log-functionapplogging-dev"
+application_insights_name      = "appi-functionapplogging-dev"
+service_plan_name              = "asp-functionapplogging-dev"
+function_app_name              = "func-functionlog-dev-001"
+
+deployment_container_name = "deployment"
+results_container_name    = "processed-items"
+work_queue_name            = "work-items"
+
+log_retention_days    = 30
+maximum_instance_count = 100
+instance_memory_in_mb  = 2048
+
+# Set to false only when the Terraform principal already has both required
+# Storage data-plane roles at the Storage account scope.
+grant_deployer_storage_data_roles = true
+storage_rbac_propagation_wait      = "30s"
+
+# Set false only when provisioning infrastructure without deploying the app.
+deployment_enabled          = true
+deployment_source_path     = "src"
+deployment_test_source_path = "tests"
+project_path               = "src/LoggingDemo.Functions/LoggingDemo.Functions.csproj"
+test_project_path          = "tests/LoggingDemo.Tests/LoggingDemo.Tests.csproj"
+build_script_path          = "scripts/Build-FunctionPackage.ps1"
+deployment_package_path    = "artifacts/LoggingDemo.Functions.zip"
+deployment_timeout_seconds = 600
+
+tags = {
+  cost-center = "replace-me"
+}

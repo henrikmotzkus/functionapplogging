@@ -1,0 +1,10 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "DemoStorage": "UseDevelopmentStorage=true",
+    "DemoWorkQueueName": "work-items",
+    "DemoResultsContainerName": "processed-items"
+  }
+}

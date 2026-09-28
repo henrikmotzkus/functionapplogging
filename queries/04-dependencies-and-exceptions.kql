@@ -1,0 +1,20 @@
+let correlationId = "{{CORRELATION_ID}}";
+let correlatedOperations = materialize(
+    AppTraces
+    | where tostring(Properties["CorrelationId"]) == correlationId
+    | distinct OperationId);
+union isfuzzy=true
+    (AppDependencies
+        | extend TelemetryType = "Dependency",
+                 Detail = strcat(Name, " ", Data),
+                 Outcome = iff(Success, "Success", strcat("Failed: ", ResultCode))),
+    (AppExceptions
+        | extend TelemetryType = "Exception",
+                 Detail = OuterMessage,
+                 Outcome = ProblemId)
+| where tostring(Properties["CorrelationId"]) == correlationId
+    or OperationId in (correlatedOperations)
+| extend DemoLayer = tostring(Properties["DemoLayer"]),
+         Scenario = tostring(Properties["Scenario"])
+| project TimeGenerated, TelemetryType, Scenario, DemoLayer, Outcome, Detail, OperationId
+| order by TimeGenerated asc

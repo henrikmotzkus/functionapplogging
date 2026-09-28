@@ -1,0 +1,12 @@
+**/bin/
+**/obj/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+.terraform.lock.hcl
+local.settings.json
+artifacts/
+.vs/
+.vscode/
+

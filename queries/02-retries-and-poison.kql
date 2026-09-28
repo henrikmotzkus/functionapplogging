@@ -1,0 +1,13 @@
+let correlationId = "{{CORRELATION_ID}}";
+union isfuzzy=true
+    (AppTraces | extend TelemetryType = "Trace", Detail = Message),
+    (AppExceptions | extend TelemetryType = "Exception", Detail = OuterMessage)
+| where tostring(Properties["CorrelationId"]) == correlationId
+| extend Category = tostring(Properties["CategoryName"]),
+         Scenario = tostring(Properties["Scenario"]),
+         DequeueCount = toint(Properties["DequeueCount"]),
+         MessageId = tostring(Properties["MessageId"])
+| where Scenario in ("transient", "poison") or isnotempty(DequeueCount)
+| project TimeGenerated, TelemetryType, Category, Scenario, DequeueCount, MessageId, Detail, OperationId
+| order by TimeGenerated asc
+

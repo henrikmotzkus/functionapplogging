@@ -1,0 +1,26 @@
+{
+  "version": "2.0",
+  "extensions": {
+    "queues": {
+      "batchSize": 16,
+      "maxDequeueCount": 3,
+      "messageEncoding": "base64",
+      "newBatchThreshold": 8,
+      "visibilityTimeout": "00:00:30"
+    }
+  },
+  "logging": {
+    "applicationInsights": {
+      "enableLiveMetricsFilters": true,
+      "samplingSettings": {
+        "isEnabled": false
+      }
+    },
+    "logLevel": {
+      "default": "Information",
+      "Azure.Core": "Warning",
+      "Host.Results": "Information",
+      "Microsoft.Azure.Functions.Worker": "Information"
+    }
+  }
+}
